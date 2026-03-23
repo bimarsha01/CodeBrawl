@@ -26,27 +26,35 @@ public class ProfileEntity {
     private String userName;
 
     @Column(name = "user_wins", nullable = false)
-    private int userWins;
+    private int userWins = 0;
 
     @Column(name = "user_loses", nullable = false)
-    private int userLosses;
+    private int userLosses = 0;
 
     @Column(name = "user_country", nullable = false)
     private String country;
 
     @Column(name = "xp")
-    private String xp;
-
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+    private int xp = 0;
 
     @OneToOne
     @JoinColumn(name = "user_id" , nullable = false)
     private UserEntity user;
 
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 
 }
+
