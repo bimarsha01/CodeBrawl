@@ -1,4 +1,4 @@
-package com.example.codebrawl.User.Model;
+package com.example.codebrawl.Entity.Model;
 
 
 import jakarta.persistence.*;
@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.parsing.Problem;
 
 import java.time.LocalDateTime;
 

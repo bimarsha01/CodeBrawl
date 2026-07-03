@@ -1,4 +1,4 @@
-package com.example.codebrawl.User.Model;
+package com.example.codebrawl.Entity.Model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

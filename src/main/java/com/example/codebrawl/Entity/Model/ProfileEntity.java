@@ -1,8 +1,5 @@
-package com.example.codebrawl.User.Model;
+package com.example.codebrawl.Entity.Model;
 
-
-import com.example.codebrawl.DifficultyEnum;
-import com.example.codebrawl.LanguageEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,37 +8,37 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 
 @Entity
-@Table(name = "problems")
-public class ProblemEntity {
+
+@Table(name = "profile")
+public class ProfileEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "user_name", nullable = false)
+    private String userName;
 
-    @Column(name = "problem_name" , nullable = false)
-    private String name;
+    @Column(name = "user_wins", nullable = false)
+    private int userWins = 0;
 
+    @Column(name = "user_loses", nullable = false)
+    private int userLosses = 0;
 
-    @Column(name = "problem_difficulty" , nullable = false)
-    private DifficultyEnum difficulty;
+    @Column(name = "user_country", nullable = false)
+    private String country;
 
+    @Column(name = "xp")
+    private int xp = 0;
 
-    @Column(name = "problem_language" , nullable = false)
-    private LanguageEnum language;
-
-
-    @Column(name = "problem_constraints" , nullable = false)
-    private String constraints;
-
-
-    @Column(name = "problem_complexities" , nullable = false)
-    private String complexities;
-
+    @OneToOne
+    @JoinColumn(name = "user_id" , nullable = false)
+    private UserEntity user;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -58,5 +55,5 @@ public class ProblemEntity {
         this.updatedAt = LocalDateTime.now();
     }
 
-
 }
+
