@@ -7,6 +7,7 @@ import com.example.codebrawl.Dtos.AuthDto.LoginResponseDto;
 import com.example.codebrawl.Entity.Model.UserEntity;
 import com.example.codebrawl.Repo.UserRepo;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthService {
 
     private final AuthenticationManager authenticationManager;
@@ -27,6 +29,8 @@ public class AuthService {
                 new UsernamePasswordAuthenticationToken(loginRequestDto.getUsername(), loginRequestDto.getPassword())
         );
         UserEntity user = (UserEntity) authentication.getPrincipal();
+        UserEntity user1 =(UserEntity) authentication.getCredentials();
+        log.info("Authenticated user: {}", user1);
         assert user != null;
         String token = authUtil.getAccessToken(user);
         return new LoginResponseDto(token , user.getId());
@@ -50,5 +54,7 @@ public class AuthService {
 
         return new SignUpResponseDto(user.getUsername(), user.getId());
     }
+
+
 
 }

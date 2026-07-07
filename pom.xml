@@ -61,18 +61,18 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webmvc</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.grpc</groupId>
-            <artifactId>grpc-services</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.ai</groupId>
-            <artifactId>spring-ai-starter-model-anthropic</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.ai</groupId>
-            <artifactId>spring-ai-starter-model-azure-openai</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.grpc</groupId>-->
+<!--            <artifactId>grpc-services</artifactId>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.ai</groupId>-->
+<!--            <artifactId>spring-ai-starter-model-anthropic</artifactId>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.ai</groupId>-->
+<!--            <artifactId>spring-ai-starter-model-azure-openai</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.grpc</groupId>
             <artifactId>spring-grpc-server-web-spring-boot-starter</artifactId>
@@ -88,23 +88,23 @@
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-docker-compose</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-docker-compose</artifactId>-->
+<!--            <scope>runtime</scope>-->
+<!--            <optional>true</optional>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.ai</groupId>
-            <artifactId>spring-ai-spring-boot-docker-compose</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.ai</groupId>-->
+<!--            <artifactId>spring-ai-spring-boot-docker-compose</artifactId>-->
+<!--            <scope>runtime</scope>-->
+<!--            <optional>true</optional>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -130,11 +130,11 @@
             <artifactId>spring-boot-starter-webmvc-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.grpc</groupId>
-            <artifactId>spring-grpc-test</artifactId>
-            <scope>test</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.grpc</groupId>-->
+<!--            <artifactId>spring-grpc-test</artifactId>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.shell</groupId>
             <artifactId>spring-shell-starter-test</artifactId>
@@ -143,13 +143,13 @@
     </dependencies>
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.springframework.ai</groupId>
-                <artifactId>spring-ai-bom</artifactId>
-                <version>${spring-ai.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.springframework.ai</groupId>-->
+<!--                <artifactId>spring-ai-bom</artifactId>-->
+<!--                <version>${spring-ai.version}</version>-->
+<!--                <type>pom</type>-->
+<!--                <scope>import</scope>-->
+<!--            </dependency>-->
             <dependency>
                 <groupId>org.springframework.shell</groupId>
                 <artifactId>spring-shell-dependencies</artifactId>
