@@ -5,6 +5,7 @@ import com.example.codebrawl.Dtos.AuthDto.SignUpResponseDto;
 import com.example.codebrawl.Dtos.AuthDto.LoginRequestDto;
 import com.example.codebrawl.Dtos.AuthDto.LoginResponseDto;
 import com.example.codebrawl.Entity.Model.UserEntity;
+import com.example.codebrawl.Mapper.AuthMapper;
 import com.example.codebrawl.Repo.UserRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ public class AuthService {
     private final AuthUtil authUtil;
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
+    private final AuthMapper authMapper;
 
     public LoginResponseDto login(LoginRequestDto loginRequestDto){
         Authentication authentication = authenticationManager.authenticate(
@@ -38,21 +40,19 @@ public class AuthService {
 
     public SignUpResponseDto signUp(SignUpRequestDto dto) {
 
-        UserEntity existingUser = userRepo.findByUsername(dto.getUsername())
-                .orElse(null);
-
-        if (existingUser != null) {
+        if (userRepo.existsByUsername(dto.getUsername())) {
             throw new RuntimeException("User already exists");
         }
 
-        UserEntity user = userRepo.save(
-                UserEntity.builder()
-                        .username(dto.getUsername())
-                        .hashPassword(passwordEncoder.encode(dto.getPassword()))
-                        .build()
+        UserEntity user = authMapper.toEntity(dto);
+
+        user.setHashPassword(
+                passwordEncoder.encode(dto.getPassword())
         );
 
-        return new SignUpResponseDto(user.getUsername(), user.getId());
+        UserEntity savedUser = userRepo.save(user);
+
+        return authMapper.toDto(savedUser);
     }
 
 
