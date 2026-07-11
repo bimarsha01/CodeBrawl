@@ -1,4 +1,13 @@
 package com.example.codebrawl.ExceptionHandling;
 
-public class NotFoundException {
+import lombok.Getter;
+
+@Getter
+public class NotFoundException extends RuntimeException{
+    private final String errorCode;
+    public NotFoundException(String errorCode , String message){
+        super(message);
+        this.errorCode = errorCode;
+    }
+
 }

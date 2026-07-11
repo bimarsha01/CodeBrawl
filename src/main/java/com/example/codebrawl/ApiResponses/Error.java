@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApiErrors<T> {
+public class Error<T> {
     private String error;
     private Boolean status;
     private T data;
