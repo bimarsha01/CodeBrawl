@@ -5,6 +5,7 @@ import com.example.codebrawl.Dtos.AuthDto.SignUpResponseDto;
 import com.example.codebrawl.Dtos.AuthDto.LoginRequestDto;
 import com.example.codebrawl.Dtos.AuthDto.LoginResponseDto;
 import com.example.codebrawl.Entity.Model.UserEntity;
+import com.example.codebrawl.ExceptionHandling.UserAlreadyExistsException;
 import com.example.codebrawl.Mapper.AuthMapper;
 import com.example.codebrawl.Repo.UserRepo;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -31,19 +33,22 @@ public class AuthService {
                 new UsernamePasswordAuthenticationToken(loginRequestDto.getUsername(), loginRequestDto.getPassword())
         );
         UserEntity user = (UserEntity) authentication.getPrincipal();
-        UserEntity user1 =(UserEntity) authentication.getCredentials();
-        log.info("Authenticated user: {}", user1);
-        assert user != null;
+        log.info("Authenticated user: {}", user.getUsername());
         String token = authUtil.getAccessToken(user);
         return new LoginResponseDto(token , user.getId());
     }
 
+    @Transactional
     public SignUpResponseDto signUp(SignUpRequestDto dto) {
 
         if (userRepo.existsByUsername(dto.getUsername())) {
-            throw new RuntimeException("User already exists");
+                throw new UserAlreadyExistsException("USER_ALREADY_EXISTS", "User with username " + dto.getUsername() + " already exists");
+        }
+        if(userRepo.existsByEmail(dto.getEmail())) {
+            throw new UserAlreadyExistsException("USER_ALREADY_EXISTS", "User with email " + dto.getEmail() + " already exists");
         }
 
+        log.info("Creating new user '{}'", dto.getUsername());
         UserEntity user = authMapper.toEntity(dto);
 
         user.setHashPassword(
@@ -51,6 +56,8 @@ public class AuthService {
         );
 
         UserEntity savedUser = userRepo.save(user);
+
+        log.info("User '{}' created successfully", savedUser.getUsername());
 
         return authMapper.toDto(savedUser);
     }

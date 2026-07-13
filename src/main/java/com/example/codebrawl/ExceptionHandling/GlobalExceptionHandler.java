@@ -56,6 +56,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Error> invalidCredentialsException(InvalidCredentialsException ex){
         Error errors = new Error(ex.getErrorCode(), Boolean.FALSE, ex.getMessage());
         return new ResponseEntity<>(errors, HttpStatus.UNAUTHORIZED);
+
+    }@ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<Error> userAlreadyExistsException(UserAlreadyExistsException ex){
+        Error errors = new Error(ex.getErrorCode(), Boolean.FALSE, ex.getMessage());
+        return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(Exception.class)
