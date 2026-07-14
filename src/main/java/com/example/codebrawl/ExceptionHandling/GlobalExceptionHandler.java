@@ -17,6 +17,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -45,6 +47,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Error> badCredentialsException(BadCredentialsException ex){
         Error errors = new Error(ex.getErrorCode(), Boolean.FALSE, ex.getMessage());
         return new ResponseEntity<>(errors, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(AlreadyExistException.class)
+    public ResponseEntity<Error> AlreadyExistException(AlreadyExistException ex){
+        Error error = new Error(ex.getErrorCode(), Boolean.FALSE, ex.getMessage());
+        return new ResponseEntity<>(error , BAD_REQUEST);
+
     }
 
     @ExceptionHandler(NotAvailableException.class)

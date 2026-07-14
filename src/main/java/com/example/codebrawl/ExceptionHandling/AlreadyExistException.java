@@ -1,7 +1,12 @@
 package com.example.codebrawl.ExceptionHandling;
 
+import lombok.Getter;
+
+@Getter
 public class AlreadyExistException extends RuntimeException {
-  public AlreadyExistException(String message) {
-    super(message);
-  }
+    private final String ErrorCode;
+    public AlreadyExistException(String errorCode, String message) {
+        super(message);
+        this.ErrorCode = errorCode;
+    }
 }
