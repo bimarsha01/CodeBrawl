@@ -18,12 +18,15 @@ public class SecurityConfig {
 
     private final PasswordEncoder passwordEncoder;
 
+    @Bean
 public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
             .csrf(c -> c.disable())
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth->auth
-                    .requestMatchers("/login").permitAll()
+                    .requestMatchers("/api/auth/signup",
+                            "/api/auth/login",
+                            "/login").permitAll()
                     .anyRequest().authenticated());
     return http.build();
 }

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping(("/login"))
+@RequestMapping(("/api/auth"))
 public class LoginController {
     private final AuthService authService;
     @PostMapping("/login")

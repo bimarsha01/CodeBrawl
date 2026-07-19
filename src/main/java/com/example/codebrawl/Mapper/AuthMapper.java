@@ -11,6 +11,7 @@ public interface AuthMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "hashPassword", ignore = true)
+    @Mapping(target = "role", ignore = true)
     UserEntity toEntity(SignUpRequestDto signUpRequestDto);
 
     SignUpResponseDto toDto(UserEntity user);

@@ -1,10 +1,11 @@
 package com.example.codebrawl.Security;
 
-import com.example.codebrawl.Dtos.AuthDto.SignUpRequestDto;
-import com.example.codebrawl.Dtos.AuthDto.SignUpResponseDto;
 import com.example.codebrawl.Dtos.AuthDto.LoginRequestDto;
 import com.example.codebrawl.Dtos.AuthDto.LoginResponseDto;
+import com.example.codebrawl.Dtos.AuthDto.SignUpRequestDto;
+import com.example.codebrawl.Dtos.AuthDto.SignUpResponseDto;
 import com.example.codebrawl.Entity.Model.UserEntity;
+import com.example.codebrawl.Entity.RoleEnum;
 import com.example.codebrawl.ExceptionHandling.UserAlreadyExistsException;
 import com.example.codebrawl.Mapper.AuthMapper;
 import com.example.codebrawl.Repo.UserRepo;
@@ -13,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,14 +31,23 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthMapper authMapper;
 
-    public LoginResponseDto login(LoginRequestDto loginRequestDto){
+    public LoginResponseDto login(LoginRequestDto loginRequestDto) {
+
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequestDto.getUsername(), loginRequestDto.getPassword())
+                new UsernamePasswordAuthenticationToken(
+                        loginRequestDto.getUsername(),
+                        loginRequestDto.getPassword()
+                )
         );
-        UserEntity user = (UserEntity) authentication.getPrincipal();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        UserEntity user = userRepo.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
         log.info("Authenticated user: {}", user.getUsername());
+
         String token = authUtil.getAccessToken(user);
-        return new LoginResponseDto(token , user.getId());
+
+        return new LoginResponseDto(user.getId(), token);
     }
 
     @Transactional
@@ -54,6 +66,7 @@ public class AuthService {
         user.setHashPassword(
                 passwordEncoder.encode(dto.getPassword())
         );
+        user.setRole(RoleEnum.ROLE_USER);
 
         UserEntity savedUser = userRepo.save(user);
 
