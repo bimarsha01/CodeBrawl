@@ -20,8 +20,5 @@ public class CustomUserDetailService implements UserDetailsService {
         UserEntity user = userRepo.findByUsername(username).orElseThrow();
         return new CustomUserDetails(user);
     }
-//
-//    public UserEntity getUser() {
-//
-//    }
+
 }
