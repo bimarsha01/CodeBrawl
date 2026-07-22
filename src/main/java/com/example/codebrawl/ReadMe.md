@@ -1,4 +1,4 @@
-# 🚀 CodeBrawl
+# CodeBrawl
 
 CodeBrawl is a competitive programming platform where developers sharpen their coding skills through both solo practice and real-time coding battles against other players.
 
@@ -6,17 +6,17 @@ Think of it as a combination of **LeetCode**, **Codeforces**, and real-time mult
 
 ---
 
-## 📌 Project Status
+ Project Status
 
-🚧 Currently in active development.
+ Currently in active development.
 
 The project is focused on building a production-grade backend architecture before implementing the real-time coding features.
 
 ---
 
-# ✨ Current Features
+ Current Features
 
-### Authentication
+Authentication
 - User Registration
 - User Login
 - JWT Authentication
@@ -27,7 +27,7 @@ The project is focused on building a production-grade backend architecture befor
 - MapStruct Mapping
 - PostgreSQL Integration
 
-### Backend Architecture
+ Backend Architecture
 - Layered Architecture
 - DTO Pattern
 - Repository Pattern
@@ -39,9 +39,9 @@ The project is focused on building a production-grade backend architecture befor
 
 ---
 
-# 🛠 Tech Stack
+Tech Stack
 
-### Backend
+ Backend
 - Java 21
 - Spring Boot
 - Spring Security
@@ -52,13 +52,13 @@ The project is focused on building a production-grade backend architecture befor
 - Lombok
 - Maven
 
-### Authentication
+Authentication
 - JWT (JSON Web Token)
 - BCrypt Password Encoder
 
 ---
 
-# 📂 Project Structure
+ Project Structure
 
 ```
 src
@@ -76,9 +76,9 @@ src
 
 ---
 
-# 🚧 Planned Features
+Planned Features
 
-## Authentication
+Authentication
 - Refresh Token Authentication
 - HttpOnly Secure Cookies
 - JWT Authentication Filter
@@ -88,7 +88,7 @@ src
 - Email Verification
 - OAuth2 (Google / GitHub)
 
-## Core Platform
+Core Platform
 - User Profiles
 - Coding Problems
 - Online Code Execution
@@ -103,7 +103,7 @@ src
 
 ---
 
-# 📖 Learning Goals
+Learning Goals
 
 This project is being built as a production-style backend application with emphasis on:
 
@@ -116,21 +116,21 @@ This project is being built as a production-style backend application with empha
 
 ---
 
-# ⚙️ Running the Project
+ Running the Project
 
-### Clone
+Clone
 
 ```bash
 git clone https://github.com/your-username/CodeBrawl.git
 ```
 
-### Navigate
+Navigate
 
 ```bash
 cd CodeBrawl
 ```
 
-### Configure
+ Configure
 
 Create an `application.properties` (or `application.yml`) file and configure:
 
@@ -138,7 +138,7 @@ Create an `application.properties` (or `application.yml`) file and configure:
 - JWT Secret
 - JWT Expiration
 
-### Run
+ Run
 
 ```bash
 mvn spring-boot:run
@@ -146,7 +146,7 @@ mvn spring-boot:run
 
 ---
 
-# 📈 Roadmap
+ Roadmap
 
 - [x] User Registration
 - [x] Login
@@ -167,12 +167,12 @@ mvn spring-boot:run
 
 ---
 
-# 🤝 Contributing
+ Contributing
 
 Contributions, suggestions, and feedback are welcome.
 
 ---
 
-# 📄 License
+License
 
 This project is currently under development and is intended for educational and portfolio purposes.
