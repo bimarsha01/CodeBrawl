@@ -7,10 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginTokens {
-
+public class LoginResponseDto {
     private Long id;
-    private String accessToken;
-//    private String refreshToken;
-
+    private String AccessToken;
+    private String RefreshToken;
 }
