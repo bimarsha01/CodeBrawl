@@ -1,7 +1,7 @@
 package com.example.codebrawl.Security;
 
 import com.example.codebrawl.Dtos.AuthDto.LoginRequestDto;
-import com.example.codebrawl.Dtos.AuthDto.LoginResponseDto;
+import com.example.codebrawl.Dtos.AuthDto.LoginTokens;
 import com.example.codebrawl.Dtos.AuthDto.SignUpRequestDto;
 import com.example.codebrawl.Dtos.AuthDto.SignUpResponseDto;
 import com.example.codebrawl.Entity.Model.UserEntity;
@@ -29,7 +29,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthMapper authMapper;
 
-    public LoginResponseDto login(LoginRequestDto loginRequestDto) {
+    public LoginTokens login(LoginRequestDto loginRequestDto) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -46,7 +46,7 @@ public class AuthService {
         String RefreshToken = authUtil.getRefreshToken(user);
 
 
-        return new LoginResponseDto(user.getId(), Accesstoken, RefreshToken);
+        return new LoginTokens(user.getId(), Accesstoken , RefreshToken);
     }
 
     @Transactional
