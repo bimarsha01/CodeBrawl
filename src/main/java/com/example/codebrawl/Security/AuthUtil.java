@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.Date;
 
 @Component
@@ -28,10 +29,10 @@ public class AuthUtil {
         return Jwts.builder()
                 .subject(user.getUsername())
                 .claim("userId", user.getId().toString())
-                .claim("userRole", user.getRole())
+                .claim("userRole", user.getRole().name())
                 .signWith(getAccessTokenSecretKey())
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 86400000))
+                .expiration(new Date(System.currentTimeMillis() + Duration.ofMinutes(15).toMillis()))
                 .compact();
     }
 
@@ -39,9 +40,9 @@ public class AuthUtil {
         return Jwts.builder()
                 .subject(user.getUsername())
                 .claim("userId", user.getId())
+                .signWith(getRefreshTokenSecretKey())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 7L * 24 * 60 * 60 * 1000))
-                .signWith(getRefreshTokenSecretKey())
                 .compact();
     }
 }

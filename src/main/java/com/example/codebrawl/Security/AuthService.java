@@ -42,11 +42,11 @@ public class AuthService {
 
         log.info("Authenticated user: {}", user.getUsername());
 
-        String Accesstoken = authUtil.getAccessToken(user);
-        String RefreshToken = authUtil.getRefreshToken(user);
+        String accessToken = authUtil.getAccessToken(user);
+        String refreshToken = authUtil.getRefreshToken(user);
 
 
-        return new LoginTokens(user.getId(), Accesstoken , RefreshToken);
+        return new LoginTokens(user.getId(), accessToken , refreshToken);
     }
 
     @Transactional

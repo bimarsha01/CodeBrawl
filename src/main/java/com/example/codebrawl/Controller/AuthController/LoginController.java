@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,8 +38,9 @@ public class LoginController {
             String refreshToken = responseDto.getRefreshToken();
             ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
                     .httpOnly(true)
-                    .secure(true)
+                    .secure(false)
                     .sameSite("Lax")
+                    .path("/")
                     .maxAge(Duration.ofDays(7))
                     .build();
             LoginResponseDto tokens = new LoginResponseDto(responseDto.getId(), responseDto.getAccessToken());
@@ -46,5 +48,14 @@ public class LoginController {
                     .header(HttpHeaders.SET_COOKIE, cookie.toString())
                     .body(Response.success("Login successful", tokens));
         }
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refresh(
+            @CookieValue("refreshToken") String refreshToken
+    ) {
+        System.out.println("Refresh token: " + refreshToken);
+
+        return ResponseEntity.ok("Refresh token received");
     }
 }
