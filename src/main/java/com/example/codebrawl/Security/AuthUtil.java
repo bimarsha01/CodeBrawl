@@ -1,6 +1,7 @@
 package com.example.codebrawl.Security;
 
 import com.example.codebrawl.Entity.Model.UserEntity;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,5 +45,13 @@ public class AuthUtil {
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 7L * 24 * 60 * 60 * 1000))
                 .compact();
+    }
+
+    public Claims validataRefreshToken(String refreshToken){
+        return Jwts.parser()
+                .verifyWith(getRefreshTokenSecretKey())
+                .build()
+                .parseSignedClaims(refreshToken)
+                .getPayload();
     }
 }

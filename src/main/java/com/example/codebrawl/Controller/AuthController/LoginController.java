@@ -5,6 +5,8 @@ import com.example.codebrawl.Dtos.AuthDto.LoginRequestDto;
 import com.example.codebrawl.Dtos.AuthDto.LoginResponseDto;
 import com.example.codebrawl.Dtos.AuthDto.LoginTokens;
 import com.example.codebrawl.Security.AuthService;
+import com.example.codebrawl.Security.AuthUtil;
+import io.jsonwebtoken.Claims;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,7 @@ import java.time.Duration;
 @RequestMapping(("/api/auth"))
 public class LoginController {
     private final AuthService authService;
+    private final AuthUtil authUtil;
     @PostMapping("/login")
     public ResponseEntity<Response<LoginResponseDto>> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
         log.info("Login request received for username: {}", loginRequestDto.getUsername());
@@ -54,8 +57,15 @@ public class LoginController {
     public ResponseEntity<?> refresh(
             @CookieValue("refreshToken") String refreshToken
     ) {
-        System.out.println("Refresh token: " + refreshToken);
+        try {
+            Claims claims = authUtil.validataRefreshToken(refreshToken);
 
-        return ResponseEntity.ok("Refresh token received");
+            String username = claims.getSubject();
+
+            return ResponseEntity.ok("The refresh token is valid for " + username);
+
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 }
