@@ -6,7 +6,6 @@ import com.example.codebrawl.Dtos.AuthDto.LoginResponseDto;
 import com.example.codebrawl.Dtos.AuthDto.LoginTokens;
 import com.example.codebrawl.Security.AuthService;
 import com.example.codebrawl.Security.AuthUtil;
-import io.jsonwebtoken.Claims;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -58,11 +57,11 @@ public class LoginController {
             @CookieValue("refreshToken") String refreshToken
     ) {
         try {
-            Claims claims = authUtil.validataRefreshToken(refreshToken);
+            String newAccessToken = authService.refreshAccessToken(refreshToken);
 
-            String username = claims.getSubject();
+            return ResponseEntity.ok(newAccessToken);
 
-            return ResponseEntity.ok("The refresh token is valid for " + username);
+//            now since the claim is done now what we do is to get the user from it via claims
 
         }catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

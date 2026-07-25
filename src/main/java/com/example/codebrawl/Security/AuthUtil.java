@@ -47,11 +47,15 @@ public class AuthUtil {
                 .compact();
     }
 
-    public Claims validataRefreshToken(String refreshToken){
+    public Claims validateRefreshToken(String refreshToken){
         return Jwts.parser()
                 .verifyWith(getRefreshTokenSecretKey())
                 .build()
                 .parseSignedClaims(refreshToken)
                 .getPayload();
+
+//        it handles things like
+//        jwt structure, signature along with the secret key and also expiration
+
     }
 }

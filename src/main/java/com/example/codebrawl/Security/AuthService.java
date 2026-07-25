@@ -9,11 +9,13 @@ import com.example.codebrawl.Entity.RoleEnum;
 import com.example.codebrawl.ExceptionHandling.UserAlreadyExistsException;
 import com.example.codebrawl.Mapper.AuthMapper;
 import com.example.codebrawl.Repo.UserRepo;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,5 +77,14 @@ public class AuthService {
     }
 
 
+    public String refreshAccessToken(String refreshToken) {
 
+        Claims claims = authUtil.validateRefreshToken(refreshToken);
+
+        Long userId = claims.get("userId", Long.class);
+
+        UserEntity user = userRepo.findById(userId).orElseThrow(()-> new UsernameNotFoundException("User with id" + userId +"is not found"));
+
+        return authUtil.getAccessToken(user);
+    }
 }
