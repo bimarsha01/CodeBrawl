@@ -81,6 +81,7 @@ public class AuthService {
 
         Claims claims = authUtil.validateRefreshToken(refreshToken);
 
+
         Long userId = claims.get("userId", Long.class);
 
         UserEntity user = userRepo.findById(userId).orElseThrow(()-> new UsernameNotFoundException("User with id" + userId +"is not found"));

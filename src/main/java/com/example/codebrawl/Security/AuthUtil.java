@@ -33,7 +33,7 @@ public class AuthUtil {
                 .claim("userRole", user.getRole().name())
                 .signWith(getAccessTokenSecretKey())
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + Duration.ofMinutes(15).toMillis()))
+                .expiration(new Date(System.currentTimeMillis() + Duration.ofSeconds(40).toMillis()))
                 .compact();
     }
 
@@ -43,7 +43,7 @@ public class AuthUtil {
                 .claim("userId", user.getId())
                 .signWith(getRefreshTokenSecretKey())
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 7L * 24 * 60 * 60 * 1000))
+                .expiration(new Date(System.currentTimeMillis() + Duration.ofMinutes(2).toMillis()))
                 .compact();
     }
 

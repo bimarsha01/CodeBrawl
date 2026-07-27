@@ -2,10 +2,8 @@ package com.example.codebrawl.ExceptionHandling;
 
 import com.example.codebrawl.ApiResponses.Error;
 import com.example.codebrawl.ApiResponses.Response;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
+import io.jsonwebtoken.ExpiredJwtException;
+import org.springframework.http.*;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,6 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,11 +65,26 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         Error errors = new Error(ex.getErrorCode(), Boolean.FALSE, ex.getMessage());
         return new ResponseEntity<>(errors, HttpStatus.UNAUTHORIZED);
 
-    }@ExceptionHandler(UserAlreadyExistsException.class)
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<Error> userAlreadyExistsException(UserAlreadyExistsException ex){
         Error errors = new Error(ex.getErrorCode(), Boolean.FALSE, ex.getMessage());
         return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
     }
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<Error> expiredJwtException(ExpiredJwtException ex){
+        Error errors = new Error("EXPIRED_JWT", Boolean.FALSE, ex.getMessage());
+        ResponseCookie cookie = ResponseCookie.from("refreshToken", "")
+                .httpOnly(true)
+                .maxAge(Duration.ZERO)
+                .sameSite("Lax")
+                .secure(false)
+                .path("/")
+                .build();
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).header(HttpHeaders.SET_COOKIE , cookie.toString()).body(errors);
+    }
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Error> handleException(Exception ex){

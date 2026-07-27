@@ -27,6 +27,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
                     .requestMatchers("/api/auth/signup",
                             "/api/auth/login",
                             "/api/auth/refresh",
+//                            "/api/**",
                             "/login").permitAll()
                     .anyRequest().authenticated());
     return http.build();
