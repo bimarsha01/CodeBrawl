@@ -7,6 +7,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +19,7 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 @Component
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final AuthUtil authUtil;
@@ -30,15 +32,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
 
+        log.info("ok well up to here the filter is being called");
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        log.info("Authorization Header: {}", authHeader);
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
 
             String jwtToken = authHeader.substring(7);
 
+
             Claims claims = authUtil.validateAccessToken(jwtToken);
 
             String username = claims.getSubject();
+            log.info("we got the username: {}", username);
 
             if (username == null || username.isBlank()) {
                 throw new JwtException("JWT does not contain a valid subject.");
@@ -61,6 +67,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 );
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+                log.info("Authentication successful for user: {}", username);
             }
         }
 
