@@ -58,4 +58,15 @@ public class AuthUtil {
 //        jwt structure, signature along with the secret key and also expiration
 
     }
+    public Claims validateAccessToken(String accessToken){
+        return Jwts.parser()
+                .verifyWith(getAccessTokenSecretKey())
+                .build()
+                .parseSignedClaims(accessToken)
+                .getPayload();
+
+//        it handles things like
+//        jwt structure, signature along with the secret key and also expiration
+
+    }
 }
