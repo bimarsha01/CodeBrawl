@@ -1,6 +1,7 @@
 package com.example.codebrawl.Security;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -9,8 +10,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -24,6 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final AuthUtil authUtil;
     private final CustomUserDetailService customUserDetailService;
+    private final AuthenticationEntryPoint authenticationEntryPoint;
 
     @Override
     protected void doFilterInternal(
@@ -40,37 +44,59 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             String jwtToken = authHeader.substring(7);
 
+            try {
 
-            Claims claims = authUtil.validateAccessToken(jwtToken);
 
-            String username = claims.getSubject();
-            log.info("we got the username: {}", username);
+                Claims claims = authUtil.validateAccessToken(jwtToken);
 
-            if (username == null || username.isBlank()) {
-                throw new JwtException("JWT does not contain a valid subject.");
-            }
+                String username = claims.getSubject();
+                log.info("we got the username: {}", username);
 
-            if (SecurityContextHolder.getContext().getAuthentication() == null) {
+                if (username == null || username.isBlank()) {
+                    throw new JwtException("JWT does not contain a valid subject.");
+                }
 
-                CustomUserDetails userDetails =
-                        (CustomUserDetails) customUserDetailService.loadUserByUsername(username);
+                if (SecurityContextHolder.getContext().getAuthentication() == null) {
 
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(
-                                userDetails,
-                                null,
-                                userDetails.getAuthorities()
-                        );
+                    CustomUserDetails userDetails =
+                            (CustomUserDetails) customUserDetailService.loadUserByUsername(username);
 
-                authentication.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(
+                                    userDetails,
+                                    null,
+                                    userDetails.getAuthorities()
+                            );
+
+                    authentication.setDetails(
+                            new WebAuthenticationDetailsSource().buildDetails(request)
+                    );
+
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    log.info("Authentication successful for user: {}", username);
+                }
+            } catch (ExpiredJwtException ex) {
+
+                authenticationEntryPoint.commence(
+                        request,
+                        response,
+                        new InsufficientAuthenticationException(
+                                "Access token expired", ex)
+                );
+                return;
+
+            } catch (JwtException ex) {
+
+                authenticationEntryPoint.commence(
+                        request,
+                        response,
+                        new InsufficientAuthenticationException(
+                                "Invalid JWT", ex)
                 );
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                log.info("Authentication successful for user: {}", username);
+                return;
             }
         }
-
         filterChain.doFilter(request, response);
     }
 }

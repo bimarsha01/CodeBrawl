@@ -19,6 +19,7 @@ public class SecurityConfig {
 
     private final PasswordEncoder passwordEncoder;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Bean
 public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -32,7 +33,12 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
 //                            "/api/**",
                             "/login").permitAll()
                     .anyRequest().authenticated())
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+            .exceptionHandling(exception ->
+
+                    exception.authenticationEntryPoint(jwtAuthenticationEntryPoint)
+
+            );
 
     return http.build();
 }
