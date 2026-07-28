@@ -8,6 +8,7 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -49,4 +50,7 @@ public class UserEntity implements UserDetails {
     public @Nullable String getPassword() {
         return "";
     }
+
+    @OneToMany(mappedBy = "user")
+    private List<RefreshTokenEntity> refreshTokens = new ArrayList<>();
 }
