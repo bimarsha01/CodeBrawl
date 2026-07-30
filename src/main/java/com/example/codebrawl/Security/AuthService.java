@@ -4,10 +4,12 @@ import com.example.codebrawl.Dtos.AuthDto.LoginRequestDto;
 import com.example.codebrawl.Dtos.AuthDto.LoginTokens;
 import com.example.codebrawl.Dtos.AuthDto.SignUpRequestDto;
 import com.example.codebrawl.Dtos.AuthDto.SignUpResponseDto;
+import com.example.codebrawl.Entity.Model.RefreshTokenEntity;
 import com.example.codebrawl.Entity.Model.UserEntity;
 import com.example.codebrawl.Entity.RoleEnum;
 import com.example.codebrawl.ExceptionHandling.UserAlreadyExistsException;
 import com.example.codebrawl.Mapper.AuthMapper;
+import com.example.codebrawl.Repo.RefreshTokenEntityRepo;
 import com.example.codebrawl.Repo.UserRepo;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -30,6 +34,7 @@ public class AuthService {
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
     private final AuthMapper authMapper;
+    private final RefreshTokenEntityRepo refreshTokenEntityRepo;
 
     public LoginTokens login(LoginRequestDto loginRequestDto) {
 
@@ -47,6 +52,9 @@ public class AuthService {
         String accessToken = authUtil.getAccessToken(user);
         String refreshToken = authUtil.getRefreshToken(user);
 
+        LocalDateTime expiresAt = LocalDateTime.now().plusDays(7);
+
+        saveRefreshToken(user, refreshToken, expiresAt);
 
         return new LoginTokens(user.getId(), accessToken , refreshToken);
     }
@@ -87,5 +95,22 @@ public class AuthService {
         UserEntity user = userRepo.findById(userId).orElseThrow(()-> new UsernameNotFoundException("User with id" + userId +"is not found"));
 
         return authUtil.getAccessToken(user);
+    }
+
+    private void saveRefreshToken(UserEntity user,
+                                  String refreshToken,
+                                  LocalDateTime expiresAt) {
+
+        RefreshTokenEntity refreshTokenEntity = RefreshTokenEntity.builder()
+                .token(refreshToken)
+                .user(user)
+                .createdAt(LocalDateTime.now())
+                .expiresAt(expiresAt)
+                .revoked(false)
+                .build();
+
+        refreshTokenEntityRepo.save(refreshTokenEntity);
+
+        log.info("Refresh token saved for user '{}'", user.getUsername());
     }
 }

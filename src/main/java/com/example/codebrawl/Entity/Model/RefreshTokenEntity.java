@@ -2,10 +2,7 @@ package com.example.codebrawl.Entity.Model;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -14,7 +11,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
+@Builder
 @Entity
 @Table(name = "refresh_tokens")
 public class RefreshTokenEntity {
@@ -24,6 +21,9 @@ public class RefreshTokenEntity {
 
     @Column(name = "token" , nullable = false , unique = true)
     private String token;
+
+    @Column(name = "revoked" , nullable = false)
+    private boolean revoked;
 
 
    @ManyToOne(fetch = FetchType.LAZY)

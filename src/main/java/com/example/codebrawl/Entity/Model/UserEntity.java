@@ -18,7 +18,19 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "users")
+@Table(
+        name = "users",
+        indexes = {
+                @Index(
+                        name = "idx_users_email",
+                        columnList = "email"
+                ),
+                @Index(
+                        name = "idx_users_username",
+                        columnList = "username"
+                )
+        }
+)
 public class UserEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,10 +47,13 @@ public class UserEntity implements UserDetails {
 
     @Column(name = "role" , nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private RoleEnum role;
+    private RoleEnum role = RoleEnum.ROLE_USER;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private ProfileEntity profile;
+
+    @Column(name = "contact", unique = true)
+    private String contactNumber;
 
 
     @Override
@@ -48,7 +63,8 @@ public class UserEntity implements UserDetails {
 
     @Override
     public @Nullable String getPassword() {
-        return "";
+
+        return hashPassword;
     }
 
     @OneToMany(mappedBy = "user")
