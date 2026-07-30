@@ -14,6 +14,7 @@ import com.example.codebrawl.Repo.UserRepo;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -88,6 +89,15 @@ public class AuthService {
     public String refreshAccessToken(String refreshToken) {
 
         Claims claims = authUtil.validateRefreshToken(refreshToken);
+
+        RefreshTokenEntity entity = refreshTokenEntityRepo.findByToken(refreshToken);
+
+        if(entity.isRevoked()){
+            throw new AccessDeniedException("SORRY ! YOU HAVE TO LOGIN AGAIN");
+        }
+        if (entity.getExpiresAt().isBefore(LocalDateTime.now())) {
+            throw new AccessDeniedException("SORRY YOU HAVE TO LOGIN AGAIN");
+        }
 
 
         Long userId = claims.get("userId", Long.class);
