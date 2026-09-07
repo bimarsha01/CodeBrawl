@@ -69,6 +69,10 @@ public class AuthService {
         if(userRepo.existsByEmail(dto.getEmail())) {
             throw new UserAlreadyExistsException("USER_ALREADY_EXISTS", "User with email " + dto.getEmail() + " already exists");
         }
+        if(userRepo.existsByContactNumber(dto.getContactNumber())){
+            throw new UserAlreadyExistsException("USER_ALREADY_EXIST" , "user with contact number " + dto.getContactNumber() + " already exists");
+
+        }
 
         log.info("Creating new user '{}'", dto.getUsername());
         UserEntity user = authMapper.toEntity(dto);
