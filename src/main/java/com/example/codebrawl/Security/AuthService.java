@@ -103,7 +103,6 @@ public class AuthService {
             throw new AccessDeniedException("SORRY YOU HAVE TO LOGIN AGAIN");
         }
 
-
         Long userId = claims.get("userId", Long.class);
 
         UserEntity user = userRepo.findById(userId).orElseThrow(()-> new UsernameNotFoundException("User with id" + userId +"is not found"));
@@ -116,11 +115,10 @@ public class AuthService {
                                   LocalDateTime expiresAt) {
 
         RefreshTokenEntity refreshTokenEntity = RefreshTokenEntity.builder()
-                .token(refreshToken)
+                .refreshToken(refreshToken)
                 .user(user)
                 .createdAt(LocalDateTime.now())
                 .expiresAt(expiresAt)
-                .revoked(false)
                 .build();
 
         refreshTokenEntityRepo.save(refreshTokenEntity);

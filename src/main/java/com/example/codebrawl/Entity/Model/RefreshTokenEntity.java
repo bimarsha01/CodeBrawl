@@ -20,10 +20,10 @@ public class RefreshTokenEntity {
     private Long id;
 
     @Column(name = "token" , nullable = false , unique = true)
-    private String token;
+    private String refreshToken;
 
     @Column(name = "revoked" , nullable = false)
-    private boolean revoked;
+    private boolean revoked = false;
 
 
    @ManyToOne(fetch = FetchType.LAZY)

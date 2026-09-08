@@ -6,6 +6,7 @@ import com.example.codebrawl.Dtos.AuthDto.LoginResponseDto;
 import com.example.codebrawl.Dtos.AuthDto.LoginTokens;
 import com.example.codebrawl.Security.AuthService;
 import com.example.codebrawl.Security.AuthUtil;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,13 +55,22 @@ public class LoginController {
     ) {
         try {
             String newAccessToken = authService.refreshAccessToken(refreshToken);
-
             return ResponseEntity.ok(newAccessToken);
 
 //            now since the claim is done now what we do is to get the user from it via claims
 
-        }catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }catch (ExpiredJwtException e) {
+            ResponseCookie cookie = ResponseCookie.from("refreshToken" , "")
+                    .httpOnly(true)
+                    .secure(false)
+                    .sameSite("Lax")
+                    .path("/")
+                    .maxAge(0)
+                    .build();
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .header(HttpHeaders.SET_COOKIE , cookie.toString())
+                    .body("Session expired. please login again");
         }
     }
 }
