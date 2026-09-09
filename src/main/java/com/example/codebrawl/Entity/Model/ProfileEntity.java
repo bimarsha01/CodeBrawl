@@ -21,20 +21,24 @@ public class ProfileEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(name = "user_name", nullable = false)
     private String userName;
-
-    @Column(name = "user_wins", nullable = false)
-    private int userWins = 0;
-
-    @Column(name = "user_loses", nullable = false)
-    private int userLosses = 0;
 
     @Column(name = "user_country", nullable = false)
     private String country;
 
-    @Column(name = "xp")
-    private int xp = 0;
+    @Column(name = "user_bio")
+    private String bio;
+
+    @Column(name = "user_github_profile" , unique = true)
+    private String githubProfile;
+
+    @Column(name = "user_linkedin_profile" , unique = true)
+    private String linkedinProfile;
+
+    @Column(name = "user_avatarUrl")
+    private String avatarUrl;
 
     @OneToOne
     @JoinColumn(name = "user_id" , nullable = false)
