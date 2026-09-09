@@ -27,7 +27,7 @@ public class LogoutController {
     ) {
 
         RefreshTokenEntity entity =
-                refreshTokenEntityRepo.findByToken(refreshToken);
+                refreshTokenEntityRepo.findByRefreshToken(refreshToken);
 
         if (entity != null) {
             entity.setRevoked(true);

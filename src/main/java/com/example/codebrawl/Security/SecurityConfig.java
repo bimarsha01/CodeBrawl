@@ -30,6 +30,7 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
                     .requestMatchers("/api/auth/signup",
                             "/api/auth/login",
                             "/api/auth/refresh",
+                            "/api/auth/logout",
                             "/swagger-ui/**",
                             "/v3/api-docs/**",
 //                            "/api/**",

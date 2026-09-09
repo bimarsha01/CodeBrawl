@@ -94,7 +94,7 @@ public class AuthService {
 
         Claims claims = authUtil.validateRefreshToken(refreshToken);
 
-        RefreshTokenEntity entity = refreshTokenEntityRepo.findByToken(refreshToken);
+        RefreshTokenEntity entity = refreshTokenEntityRepo.findByRefreshToken(refreshToken);
 
         if(entity.isRevoked()){
             throw new AccessDeniedException("SORRY ! YOU HAVE TO LOGIN AGAIN");
