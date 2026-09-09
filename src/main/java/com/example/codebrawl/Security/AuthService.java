@@ -41,7 +41,7 @@ public class AuthService {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequestDto.getUsername(),
+                        loginRequestDto.getEmail(),
                         loginRequestDto.getPassword()
                 )
         );
@@ -63,18 +63,18 @@ public class AuthService {
     @Transactional
     public SignUpResponseDto signUp(SignUpRequestDto dto) {
 
-        if (userRepo.existsByUsername(dto.getUsername())) {
-                throw new UserAlreadyExistsException("USER_ALREADY_EXISTS", "User with username " + dto.getUsername() + " already exists");
+        if (userRepo.existsByUsername(dto.getEmail())) {
+                throw new UserAlreadyExistsException("USER_ALREADY_EXISTS", "User with username " + dto.getEmail() + " already exists");
         }
         if(userRepo.existsByEmail(dto.getEmail())) {
             throw new UserAlreadyExistsException("USER_ALREADY_EXISTS", "User with email " + dto.getEmail() + " already exists");
         }
-        if(userRepo.existsByContactNumber(dto.getContactNumber())){
-            throw new UserAlreadyExistsException("USER_ALREADY_EXIST" , "user with contact number " + dto.getContactNumber() + " already exists");
+//        if(userRepo.existsByContactNumber(dto.getContactNumber())){
+//            throw new UserAlreadyExistsException("USER_ALREADY_EXIST" , "user with contact number " + dto.getContactNumber() + " already exists");
+//
+//        }
 
-        }
-
-        log.info("Creating new user '{}'", dto.getUsername());
+        log.info("Creating new user '{}'", dto.getEmail());
         UserEntity user = authMapper.toEntity(dto);
 
         user.setHashPassword(

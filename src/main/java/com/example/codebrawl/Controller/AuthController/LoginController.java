@@ -27,7 +27,7 @@ public class LoginController {
     private final AuthUtil authUtil;
     @PostMapping("/login")
     public ResponseEntity<Response<LoginResponseDto>> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
-        log.info("Login request received for username: {}", loginRequestDto.getUsername());
+        log.info("Login request received for username: {}", loginRequestDto.getEmail());
         LoginTokens responseDto = authService.login(loginRequestDto);
         if (responseDto == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
