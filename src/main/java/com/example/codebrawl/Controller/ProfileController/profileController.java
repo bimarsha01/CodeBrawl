@@ -1,13 +1,12 @@
 package com.example.codebrawl.Controller.ProfileController;
 
 
-import com.example.codebrawl.ApiResponses.Response;
-import com.example.codebrawl.Dtos.AuthDto.LoginResponseDto;
 import com.example.codebrawl.Dtos.ProfileDtos.ProfileRequestDto;
 import com.example.codebrawl.Service.ProfileService.profileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,10 +22,14 @@ public class profileController {
     private final profileService profileService;
 
     @PostMapping("/createProfile")
-    public ResponseEntity<Response<LoginResponseDto>> createProfile(@Valid @RequestBody ProfileRequestDto profileRequestDto){
+    public ResponseEntity<Void> createProfile(
+            @Valid @RequestBody ProfileRequestDto profileRequestDto
+    ) {
 
+        profileService.createProfile(profileRequestDto);
 
-        boolean created = profileService.createProfile(profileRequestDto);
-
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .build();
     }
 }
