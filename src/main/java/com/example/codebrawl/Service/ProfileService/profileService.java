@@ -4,6 +4,7 @@ import com.example.codebrawl.Dtos.ProfileDtos.ProfileRequestDto;
 import com.example.codebrawl.Entity.Model.ProfileEntity;
 import com.example.codebrawl.Entity.Model.UserEntity;
 import com.example.codebrawl.ExceptionHandling.UserAlreadyExistsException;
+import com.example.codebrawl.Repo.ProfileRepo;
 import com.example.codebrawl.Repo.UserRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class profileService {
 
     private final UserRepo userRepo;
+    private final ProfileRepo profileRepo;
 
     public void createProfile(ProfileRequestDto requestDto){
 
@@ -41,6 +43,7 @@ public class profileService {
         user.setUsername(requestDto.getUsername());
 
 
+        profileRepo.save(profile);
 //        return true;
     }
 }
