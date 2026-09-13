@@ -4,6 +4,7 @@ import com.example.codebrawl.Dtos.ProfileDtos.ProfileRequestDto;
 import com.example.codebrawl.Entity.Model.ProfileEntity;
 import com.example.codebrawl.Entity.Model.UserEntity;
 import com.example.codebrawl.ExceptionHandling.UserAlreadyExistsException;
+import com.example.codebrawl.Mapper.ProfileMapper;
 import com.example.codebrawl.Repo.ProfileRepo;
 import com.example.codebrawl.Repo.UserRepo;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ public class profileService {
 
     private final UserRepo userRepo;
     private final ProfileRepo profileRepo;
+    private final ProfileMapper profileMapper;
 
     public void createProfile(ProfileRequestDto requestDto){
 
@@ -30,17 +32,21 @@ public class profileService {
 
         UserEntity user = (UserEntity) authentication.getPrincipal();
 
+        if(profileRepo.existsByUser(user)){
+            throw new UserAlreadyExistsException("USER_ALREADY_EXISTS", "Username already exist. Please login or report a problem");
+        }
 
-        ProfileEntity profile = ProfileEntity.builder()
-                .bio(requestDto.getBio())
-                .country(requestDto.getCountry())
-                .avatarUrl(requestDto.getAvatarUrl())
-                .githubProfile(requestDto.getGithubUsername())
-                .linkedinProfile(requestDto.getLinkedInUsername())
-                .user(user)
-                .build();
+//        UserEntity user = currentUserService.getCurrentUser();
+
+
+       ProfileEntity profile = profileMapper.toEntity(requestDto);
 
         user.setUsername(requestDto.getUsername());
+
+        profile.setUser(user);
+
+        profileRepo.save(profile);
+
 
 
         profileRepo.save(profile);
