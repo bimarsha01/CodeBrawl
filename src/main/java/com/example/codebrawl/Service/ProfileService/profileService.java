@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,7 @@ public class profileService {
     private final ProfileRepo profileRepo;
     private final ProfileMapper profileMapper;
 
+    @Transactional
     public void createProfile(ProfileRequestDto requestDto){
 
         if(userRepo.existsByUsername(requestDto.getUsername())){
@@ -44,10 +46,6 @@ public class profileService {
         user.setUsername(requestDto.getUsername());
 
         profile.setUser(user);
-
-        profileRepo.save(profile);
-
-
 
         profileRepo.save(profile);
 //        return true;
