@@ -72,6 +72,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         Error errors = new Error(ex.getErrorCode(), Boolean.FALSE, ex.getMessage());
         return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<Error> UnauthorizedException(UnauthorizedException ex){
+        Error errors = new Error(ex.getErrorCode(), Boolean.FALSE, ex.getMessage());
+        return new ResponseEntity<>(errors, HttpStatus.CONFLICT);
+    }
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<Error> expiredJwtException(ExpiredJwtException ex){
         Error errors = new Error("EXPIRED_JWT", Boolean.FALSE, ex.getMessage());

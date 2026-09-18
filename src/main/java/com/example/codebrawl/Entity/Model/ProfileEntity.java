@@ -39,7 +39,7 @@ public class ProfileEntity {
     private String avatarUrl;
 
     @OneToOne
-    @JoinColumn(name = "user_id" , nullable = false)
+    @JoinColumn(name = "user_id" , nullable = false , unique = true)
     private UserEntity user;
 
     @Column(name = "created_at", nullable = false)
